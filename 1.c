@@ -51,7 +51,7 @@ int main() {
 
   num_digits -= 1;  // When showing each digit in the loop, we needed to count from `1`. Now we don't!
 
-  printf("Thus, the total number of digits was: `%d`.\n", num_digits);
+  printf("Thus, the total number of digits is: `%d`.\n", num_digits);
   printf("Their sum, is: `%d`.\n", digits_sum);
 
   return 0;
