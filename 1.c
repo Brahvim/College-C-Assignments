@@ -16,12 +16,12 @@ typedef unsigned long long ull;
 /** Clears `stdin` for next use. Call this AFTER reading `stdin` using, say, `scanf()`. */
 void clear_stdin(void);
 
-/** Ensures getting a valid number as input from the user, for the purposes of this program. */
+/** Ensures getting a valid number as input from the user, for the purposes of this program, then goes onto . */
 ull ensure_user_input(void);
 
 /**
  * Takes in the address of the location in which to store the input,
- * returning whether or not the operation was successful.
+ * returning whether or not the operation was successful using the `TRUE` and `FALSE` macros.
  */
 char get_user_input(ull *input_number_storage_addr);
 #pragma endregion
