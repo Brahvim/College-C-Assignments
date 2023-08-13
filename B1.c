@@ -1,3 +1,5 @@
+// Author: Brahvim Bhaktvatsal
+
 #include <stdio.h>
 
 #pragma region  // Header declarations.
