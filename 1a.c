@@ -1,10 +1,12 @@
+// Author: Brahvim Bhaktvatsal.
+
 #include <stdio.h>  // Used only for `printf()`.
 
-// Parts of the name:
+// Parts of my name:
 #define FIRST_NAME "Brahvim"
 #define SECOND_NAME "Bhaktvatsal"
 
-// Author's address:
+// My address:
 #define ADDRESS "undefined"
 
 int main() {
