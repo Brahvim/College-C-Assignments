@@ -19,11 +19,17 @@ void clear_stdin(void);
 int main() {
   puts("Welcome to the base-to-power calculator!");
 
-  double base = ask_user_to_enter("base to give a power to");
-  double power = ask_user_to_enter("power to give the base");
+  const double base = ask_user_to_enter("base to give a power to");
+  const double power = ask_user_to_enter("power to give the base");
+  const double result = pow(base, power);
+  const int result_as_int = (int)result;
 
-  printf("Here's the result!: %lf`", pow(base, power));
+  if (result == result_as_int) {
+    printf("Here's the result!: `%d`\n", result_as_int);
+    return 0;
+  }
 
+  printf("Here's the result!: `%lf`\n", result);
   return 0;
 }
 
