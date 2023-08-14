@@ -5,7 +5,5 @@ int main() {
   a = b;  // Giving `a` the value of `b`.
   b = t;  // Storing the old value of `a` into `b`, which we earlier stored in `t`.
 
-  printf("Yo! `a` is now `%d`, and `b` is now `%d`!\n", a, b);
-
   return 0;
 }
