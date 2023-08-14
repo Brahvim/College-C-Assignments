@@ -3,7 +3,7 @@
 #include <math.h>  // Used only for `pow()`.
 #include <stdio.h>
 
-// Compilation note: Please compile using `gcc -o out 1b.c -lm` on *nix
+// Compilation note: Please compile using `gcc -o out A1b.c -lm` on *nix
 // systems!
 // `-lm` links our program with `libm.so` so we can use `math.h`.
 // This is not needed when using MSVC or MinGW on Microsoft Windows
@@ -21,7 +21,7 @@
 void clear_stdin(void);
 
 /** Gets the user's input and stores into the given address. */
-char get_user_input_for(double *p_input_number_storage_addr);
+char get_user_input_for(double *input_number_storage_addr);
 
 /**
  * Asks the user for a specific piece of information about the loan,
