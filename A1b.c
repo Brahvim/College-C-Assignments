@@ -13,7 +13,7 @@
 
 #define TRUE 1
 #define FALSE 0
-    
+
 // Functions declared here are defined below `main()`.
 
 /** Clears `stdin` for next use. Call this AFTER reading `stdin` using,
@@ -103,7 +103,7 @@ char get_user_input_for(double *p_input_number_storage_addr) {
 }
 
 void clear_stdin(void) {
-  for (char c; !(c == '\n' || c == EOF); c = getchar())
+  for (char c; !((c = getchar()) == '\n' || c == EOF);)
     ;
 }
 #pragma endregion
