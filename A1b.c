@@ -13,7 +13,7 @@
 
 #define TRUE 1
 #define FALSE 0
-
+    
 // Functions declared here are defined below `main()`.
 
 /** Clears `stdin` for next use. Call this AFTER reading `stdin` using,
@@ -30,7 +30,7 @@ char get_user_input_for(double *input_number_storage_addr);
  * The string passed in is formatted using the format string,
  * `"Please enter the %s: "`, then written to `stdout` using `printf()`.
  */
-double ask_user_to_enter(const char const *loan_parameter_name);
+double ask_user_to_enter(const char *loan_parameter_name);
 
 /** Calculates simple interest given parameters. */
 double find_simple_interest(const float principal, const float time, const float rate);
