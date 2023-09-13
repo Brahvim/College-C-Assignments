@@ -56,7 +56,7 @@ int main() {
 }
 
 // Disallowing custom allocations via `p_storage_var` for simplicity:
-double ask_user_to_enter(const char const *p_loan_parameter_name /*, double *p_storage_var */) {
+double ask_user_to_enter(const char *p_loan_parameter_name /*, double *p_storage_var */) {
   double input_number;          // Performance gain from not initializing memory.
   char input_is_valid = FALSE;  // Tells us if `get_user_input()` needs to be re-called.
 
