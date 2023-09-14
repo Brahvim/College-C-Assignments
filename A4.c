@@ -2,29 +2,35 @@
 
 typedef unsigned long long ull;
 
-#define OP_ADD '+'
-#define OP_SUB '-'
-#define OP_DIV '/'
-#define OP_MULT '*'
-
-#ifdef _MSC_VER
-#pragma pack(push, 1)
-#endif
+enum binary_expr_op {
+    ADD = '+',
+    SUB = '-',
+    DIV = '/',
+    MULT = '*',
+};
 
 struct binary_expr {
-    char op;
+    enum binary_expr_op op;
     ull n1, n2;
-#ifdef __GNUC__
-} __attribute__((packed));
-#else
 };
-#endif
-
-#ifdef _MSC_VER
-#pragma pack(pop)
-#endif
-
 
 int main() {
+    puts("Hello there, and welcome to the simple calculator program!");
+    puts("Expressions such as `1234 + 5678` can be used here.");
+    puts("However, only the operators `+`, `-`, `*`, `/` are available.");
 
+    printf("Please enter your expression: ");
+
+    for (char input_is_valid = FALSE; !input_is_valid;) {
+
+    }
+}
+
+char get_user_input_for_struct(const char *p_format_string, ...) {
+    va_list args;
+    va_start(args, p_format_string);
+    const int scan_result = vscanf(p_format_string, args);
+    va_end(args);
+
+    return FALSE;
 }

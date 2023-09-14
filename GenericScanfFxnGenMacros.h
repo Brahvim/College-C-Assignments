@@ -32,16 +32,17 @@ type ensure_user_input_as_##type(const char *prompt);
 
 #define DEFINE_GENERIC_INPUT_ENSURER(type)										\
 type ensure_user_input_as_##type(const char *p_prompt) {                       	\
-    type user_input;                                                            \
+	type user_input = 0;														\
     for (char input_is_valid = FALSE; !input_is_valid;) {                       \
+            printf("Please enter the %s: ", p_prompt);                          \
         if (p_prompt == NULL)                                                   \
             printf("Programs expects input: ");                                 \
         else                                                                    \
-            printf("Please enter the %s: ", p_prompt);                          \
+            puts("That was invalid input.");                          			\
         input_is_valid = get_user_input_as_##type(&user_input);               	\
     }                                                                           \
+																				\
 	return user_input;															\
-                                                                                \
 }
 
 #define DECLARE_GENERIC_INPUT_FUNCTIONS(type)		\
