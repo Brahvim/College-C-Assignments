@@ -1,36 +1,74 @@
+// Author: Brahvim Bhaktvatsal
+
 #include "IoUtilsByBrahvim.h"
 
+
+// TODO: Calculator history! By detecting inputs such as `^[[A` and `^[[B`.
+
 typedef unsigned long long ull;
-
-enum binary_expr_op {
-    ADD = '+',
-    SUB = '-',
-    DIV = '/',
-    MULT = '*',
-};
-
-struct binary_expr {
-    enum binary_expr_op op;
-    ull n1, n2;
-};
 
 int main() {
     puts("Hello there, and welcome to the simple calculator program!");
     puts("Expressions such as `1234 + 5678` can be used here.");
     puts("However, only the operators `+`, `-`, `*`, `/` are available.");
+    puts("Enter your expressions!:");
 
-    printf("Please enter your expression: ");
+    // These are not well-named because I later have to write this stuff BY HAND!:
+    struct binary_expr {
+        char op;
+        double n1, n2, res;
+    }  /* __attribute__((packed)) */
+    uin = {}; // I'd like to call this `user_input_expr` instead.
 
-    for (char input_is_valid = FALSE; !input_is_valid;) {
+    while (true) {
+        for (char input_is_valid = false; !input_is_valid;) {
+            input_is_valid = scanf("%lf %c %lf", &uin.n1, &uin.op, &uin.n2) == 3;
 
+            // I like not having spaces in code-only comments, but VSCode doesn't this with other languages...:
+            //if (!input_is_valid)
+            //input_is_valid = scanf("%lf%c%lf", &uin.n1, &uin.op, &uin.n2) == 3;
+
+            if (!input_is_valid) {
+                puts("Invalid input, try again!:");
+                continue;
+            }
+        }
+
+        switch (uin.op) {
+            case '+':
+            uin.res = uin.n1 + uin.n2;
+            break;
+
+            case '-':
+            uin.res = uin.n1 - uin.n2;
+            break;
+
+            case '*':
+            uin.res = uin.n1 * uin.n2;
+            break;
+
+            case '/':
+            if (uin.n1 == 0 || uin.n2 == 0)
+                uin.res = 0;
+            else {
+                puts("Invalid operation.");
+                continue;
+            }
+            break;
+
+            default:
+            puts("Invalid operation! Only `+`, `-`, `*` and `/` are allowed, sorry! Try again:");
+        }
+
+        {
+            long long rounded = uin.res;
+
+            if (uin.res == rounded) {
+                printf("= `%lld`.\n", rounded);
+                continue;
+            }
+        }
+
+        printf("= `%lf`.\n", uin.res);
     }
-}
-
-char get_user_input_for_struct(const char *p_format_string, ...) {
-    va_list args;
-    va_start(args, p_format_string);
-    const int scan_result = vscanf(p_format_string, args);
-    va_end(args);
-
-    return FALSE;
 }
