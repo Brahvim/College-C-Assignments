@@ -1,5 +1,14 @@
 # Directories:
 .vscode
 
+# These expressions make sure all executable files are out!
+# [ https://stackoverflow.com/a/19023985/ ]. The last two are negating patterns:
+
+#*
+#!/**/
+#!*.*
+
+# But modidying `.vscode/tasks.json` to name files with `.out` is enough, hence:
+
 # Files:
-a.out
+*.out
