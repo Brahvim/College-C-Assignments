@@ -23,6 +23,9 @@ int main() {
     uin = {}; // I'd like to call this `user_input_expr` instead.
 
     while (true) { // We loop forever so user input is always active.
+        fputc('>', stdout);
+        fputc(' ', stdout);
+
         for (char input_is_valid = false; !input_is_valid;) {
             input_is_valid = scanf("%lf %c %lf", &uin.n1, &uin.op, &uin.n2) == 3;
 
