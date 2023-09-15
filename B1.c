@@ -1,6 +1,6 @@
 // Author: Brahvim Bhaktvatsal
 
-#include <stdio.h>
+#include "include/IoUtilsByBrahvim.h"
 
 #pragma region  // Header declarations.
 // Declared these as `const char`s earlier to avoid casting to a `char`,
@@ -8,30 +8,19 @@
 // byte sequence regardless of the data type used.
 // ...Removed the cast.
 
-#define TRUE 1
-#define FALSE 0
-
 // Shorthand!
 typedef unsigned char uchar;
 typedef unsigned long long ull;
 
-/** Clears `stdin` for next use. Call this AFTER reading `stdin` using, say, `scanf()`. */
-void clear_stdin(void);
-
-/** Ensures getting a valid number as input from the user, for the purposes of this program, then goes onto . */
-ull ensure_user_input(void);
-
-/**
- * Takes in the address of the location in which to store the input,
- * returning whether or not the operation was successful using the `TRUE` and `FALSE` macros.
- */
-char get_user_input(ull *input_number_storage_addr);
+DECLARE_GENERIC_INPUT_FUNCTIONS(ull);
 #pragma endregion
+
+DEFINE_GENERIC_INPUT_FUNCTIONS(ull, "%llu");
 
 int main() {
   puts("Welcome to the digit manipulation program!\n");
 
-  ull input_number = ensure_user_input();
+  ull input_number = ensure_user_inputs_ull("digit you want analyzed");
 
   uchar num_digits = 1;  // No 64-bit `ull` can have `255` digits or more, so we use a `uchar` for this.
   // We set this to `1` for now, then decrease it after the loop in which we show reversed digits, since it needs to
@@ -57,41 +46,4 @@ int main() {
   printf("Their sum, is: `%d`.\n", digits_sum);
 
   return 0;
-}
-
-ull ensure_user_input(void) {
-  ull input_number;             // Performance gain from not initializing memory.
-  char input_is_valid = FALSE;  // Tells us if `get_user_input()` needs to be re-called.
-
-  // Using a `while` loop instead of a `goto` statement (cross-language compatibility).
-  while (!input_is_valid) {  // If the input is not valid, continue checking.
-    input_is_valid = get_user_input(&input_number);
-  }
-
-  return input_number;
-}
-
-char get_user_input(ull *p_input_number_storage_addr) {
-  printf("Please enter the number to analyze: ");
-  const int scan_result = scanf("%llu", p_input_number_storage_addr);  // Obtaining user input.
-
-  if (scan_result == EOF) {
-    fputs("An error occurred trying to read your input! Please restart this program...\n", stderr);
-    clear_stdin();
-    return FALSE;
-  }
-
-  if (scan_result == 0) {
-    fputs("\nThat doesn't seem to be valid input.\n", stderr);
-    clear_stdin();
-    return FALSE;
-  }
-
-  clear_stdin();
-  return TRUE;
-}
-
-void clear_stdin(void) {
-  for (char c; !(c == '\n' || c == EOF); c = getchar())
-    ;
 }
