@@ -9,14 +9,14 @@
 char parse_user_input_as_##type(type *type##_storage_addr);
 
 #define DEFINE_GENERIC_INPUT_SCANNER(type, fmt_string)											\
-	char parse_user_input_as_##type (type *p_storage_addr) {										\
+	char parse_user_input_as_##type (type *p_storage_addr) {									\
 		if (p_storage_addr == NULL)																\
 			return false;																		\
 																								\
 		const int scan_result = scanf((fmt_string), p_storage_addr);							\
 																								\
 		if (scan_result == EOF) {																\
-			fputs("The program's ability to take input was turned off. Exiting...\n", stderr);	\
+			fputs("\n`stdin` received `EOF`! Did you send `^D`? Exiting...\n", stderr);			\
 			exit(EXIT_FAILURE);																	\
 			return false;																		\
 		} else if (scan_result != 1) {															\
@@ -38,7 +38,7 @@ type ensure_user_inputs_##type(const char *p_prompt) {                       	\
             printf("Programs expects input: ");                                 \
         else                                                                    \
             printf("Please enter the %s: ", p_prompt);                          \
-        input_is_valid = parse_user_input_as_##type(&user_input);               	\
+        input_is_valid = parse_user_input_as_##type(&user_input);               \
     }                                                                           \
 	return user_input;															\
                                                                                 \

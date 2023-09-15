@@ -1,63 +1,28 @@
+// Author: Brahvim Bhaktvatsal
+
 #pragma region	// Header declarations.
 #include <math.h>
-#include <stdio.h>
+#include "include/IoUtilsByBrahvim.h"
 
-#define TRUE 1
-#define FALSE 0
-
-// Prompts the user for input till valid input is received
-// using a `printf("Please enter the `%s`: ", message)` call.
-double ask_user_to_enter(const char *message);
-
-// Stores the user's input into `storage_addr` using `scanf()`,
-// returning `TRUE` or `FALSE` to state if it was a part of valid input.
-char store_valid_user_input_into(double *storage_addr);
-
-void clear_stdin(void);
+DECLARE_GENERIC_INPUT_FUNCTIONS(double);
 #pragma endregion
+
+DEFINE_GENERIC_INPUT_FUNCTIONS(double, "%lf");
 
 int main() {
   puts("Welcome to the base-to-power calculator!");
 
-  const double base = ask_user_to_enter("base to give a power to");
-  const double power = ask_user_to_enter("power to give the base");
-  const double result = pow(base, power);
-  const int result_as_int = (int)result;
+  const double base = ensure_user_inputs_double("base to give a power to"),
+    power = ensure_user_inputs_double("power to give the base"),
+    result = pow(base, power);
 
-  if (result == result_as_int) {
-    printf("Here's the result!: `%d`\n", result_as_int);
-    return 0;
+  {
+    const unsigned long long rounded = (unsigned long long)result;
+    if (result == rounded) {
+      printf("Here's the result!: `%llu`\n", rounded);
+      return 0;
+    }
   }
 
   printf("Here's the result!: `%lf`\n", result);
-  return 0;
-}
-
-double ask_user_to_enter(const char *p_message) {
-  double user_input;
-  char input_is_valid = FALSE;
-
-  while (!input_is_valid) {
-    printf("Please enter the `%s`: ", p_message);
-    input_is_valid = store_valid_user_input_into(&user_input);
-  }
-
-  return user_input;
-}
-
-char store_valid_user_input_into(double *p_storage_addr) {
-  const int scan_result = scanf("%lf", p_storage_addr);
-  clear_stdin();
-
-  if (scan_result == 0) {
-    puts("That doesn't seem to be valid input.");
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-void clear_stdin(void) {
-  for (char c; !(c == EOF || c == '\n'); c = getchar())
-    ;
 }

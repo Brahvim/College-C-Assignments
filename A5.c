@@ -1,8 +1,8 @@
 // Author: Brahvim Bhaktvatsal
 
+#pragma region // Header declarations.
 #include "include/IoUtilsByBrahvim.h"
 
-#pragma region // Header declarations.
 #define CELSIUS_TO_FAHRENHEIT(celsius) (((celsius) / 1.8) + 32)
 // ^^^ Could also use `9 / 5` but `1.8` is just as precise and faster.
 
