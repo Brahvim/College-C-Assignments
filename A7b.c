@@ -1,6 +1,7 @@
 // Author: Brahvim Bhaktvatsal
 
 #pragma region // Header declarations.
+#include <math.h>
 #include "include/IoUtilsByBrahvim.h"
 
 typedef unsigned long long ull;
@@ -30,11 +31,14 @@ int main() {
 }
 
 bool is_prime(const ull p_number) {
-	bool flag = true;
-	const ull check_till = p_number / 2 + 1;
+	if (p_number < 2) // If it's `1` or less, it ain't prime!
+		return false;
+
+	const ull check_till = (ull)sqrt(p_number) + 1;
 
 	for (ull i = 2; i < check_till; i++)
-		flag = p_number % i != 0;
+		if (p_number % i == 0)
+			return false;
 
-	return flag;
+	return true;
 }
