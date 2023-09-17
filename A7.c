@@ -13,7 +13,6 @@ DECLARE_GENERIC_INPUT_FUNCTIONS(ull);
 
 DEFINE_GENERIC_INPUT_FUNCTIONS(ull, "%llu");
 
-
 int main() {
 	puts("Welcome to the factorial calculation program!");
 	const ull num = ensure_user_inputs_ull("whole number to find the factorial of");
