@@ -17,7 +17,7 @@ int main() {
 	puts("Welcome to the naive-algorithm, prime number generation program!");
 	const ull count = ensure_user_inputs_ull("number of prime numbers to find!");
 
-	for (ull i = 0, found = 0, p; found != count; i++) {
+	for (ull i = 0, found = 0, p = 0; found != count; i++) {
 		if (i < p)
 			break;
 
