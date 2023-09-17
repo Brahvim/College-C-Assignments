@@ -29,7 +29,7 @@ int main() {
         for (char input_is_valid = false; !input_is_valid;) {
             input_is_valid = scanf("%lf %c %lf", &uin.n1, &uin.op, &uin.n2) == 3;
 
-            for (char c; !(c = getchar() == '\n' || c == EOF);)
+            for (char c; !((c = getchar()) == '\n' || c == EOF);)
                 ;
 
             if (!input_is_valid) {
