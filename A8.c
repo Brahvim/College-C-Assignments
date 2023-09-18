@@ -6,39 +6,68 @@
 #include <stdlib.h>
 #include <string.h>
 
+#pragma region // Macros!
+/** Allocates using `malloc()` given a type. */
 #define MALLOC_TYPE(type) (type *)malloc(sizeof(type))
 
+/** Allocates using `malloc()`, given a name for the allocated pointer, the type of the data to be allocated,
+ * and optionally, a code block (or a single line) to run when it fails.
+ */
 #define CHECKED_MALLOC(ptr_name, type, on_malloc_fail)          \
-type *ptr_name = MALLOC_TYPE(type);                             \
-    if (ptr_name == NULL) on_malloc_fail // Macro functions generally receive a semi-colon anyway.
+    type *ptr_name = MALLOC_TYPE(type);                         \
+    if (ptr_name == NULL) on_malloc_fail
+; // <-- Placed to fix an issue caused by the VSCode formatter (it places an empty space before the next comment!).
 
+/** Declares a function to use `malloc()` to allocate something of the given type. */
 #define DECLARE_MALLOCATOR(type) bool create_##type(const type **storage_addr)
 
+/** Declares a function to use `malloc()` to allocate a `struct` given only its name.
+ * Use `DECLARE_MALLOCATOR` instead if your structs were `typedef`d.
+ */
 #define DECLARE_STRUCT_MALLOCATOR(struct_name)                                  \
 bool create_ ## struct_name ## _struct(const struct struct_name **storage_addr)
+; // <-- Placed to fix an issue caused by the VSCode formatter (it places an empty space before the next comment!).
 
-#define DEFINE_MALLOCATOR(type, custom_config)                      \
-DECLARE_MALLOCATOR(type) {                                          \
-    CHECKED_MALLOC(to_fill, type, return false);                    \
-    *storage_addr = to_fill;                                        \
-    custom_config;                                                  \
-    return true;                                                    \
+#define MALLOCATOR_DEFINITION(type, ptr_name, custom_config) {                  \
+    /* Allocate one!: */                                                        \
+    CHECKED_MALLOC(ptr_name, type, return false);                               \
+    /* Assign to caller's pointer!: */                                          \
+    *storage_addr = ptr_name;                                                   \
+    custom_config;                                                              \
+    return true;                                                                \
 }
 
-#define DEFINE_STRUCT_MALLOCATOR(type, custom_config)                       \
-DECLARE_STRUCT_MALLOCATOR(type) {                                           \
-    CHECKED_MALLOC(to_fill, type, return false);                            \
-    custom_config;                                                          \
-    return true;                                                            \
-}
+/** Defines a function to use `malloc()` to allocate for a given:
+ * 1. Type,
+ * 2. Name of the pointer holding `malloc()`'s return value.
+ * 3. A code block / single line to make further changes to said pointer.
+ *
+ * The function thus defined takes in a double-pointer of the given type so assigning it to the received
+ * double-pointer is possible.
+ * It returns `true` or `false` from `stdbool.h` to indicate the allocation's status.
+ *
+ * Example:
+ * `DEFINE_MALLOCATOR(int, ptr, { *ptr = 0; })` - defines `create_int()`, a function that does things.
+ * `int *a; create_int(&a); `
+ *
+ */
+#define DEFINE_MALLOCATOR(type, ptr_name, custom_config)    \
+DECLARE_MALLOCATOR(type)                                    \
+MALLOCATOR_DEFINITION(type, ptr_name, custom_config)
+
+#define DEFINE_STRUCT_MALLOCATOR(type, ptr_name, custom_config)                             \
+DECLARE_STRUCT_MALLOCATOR(type) MALLOCATOR_DEFINITION(struct type, ptr_name, custom_config)
+; // <-- Placed to fix an issue caused by the VSCode formatter (it places an empty space before the next comment!).
+#pragma endregion
+
+#pragma region // Functions.
+#pragma endregion
 
 
 // Structures (following the convention for the Linux kernel - without `typedef`s):
 struct student;
 struct result;
 #pragma endregion
-
-DECLARE_STRUCT_MALLOCATOR(student);
 
 #pragma region // Structure definitions.
 struct student {
@@ -50,48 +79,24 @@ struct result {
     float total;
     struct student *student;
     float language, math, science;
-}/* __attribute__((packed)) */;
+} /* __attribute__((packed)) */;
 #pragma endregion
 
 #pragma region // Structure de/-allocation function definitions.
 #pragma region // Creation,
-// bool create_student_struct(const struct student **p_storage_addr) {
-//     // Allocate one!:
-//     CHECKED_MALLOC(to_fill, struct student, return false);
+DEFINE_STRUCT_MALLOCATOR(student, ptr, {
+    ptr->regno = 0L;
+    strcpy(ptr->name, "");
+});
 
-//     // Assign to caller's pointer:
-//     *p_storage_addr = to_fill;
+DEFINE_STRUCT_MALLOCATOR(result, ptr, {
+    ptr->total = 0;
+    ptr->student = NULL;
 
-DEFINE_MALLOCATOR(int, printf("LOL"));
-
-DEFINE_STRUCT_MALLOCATOR(student, {
-    to_fill->regno = 0L;
-    strcpy(to_fill->name, "");
-    });
-
-//     // ...And now, return it:
-//     return true;
-// }
-
-bool create_result_struct(const struct result **p_to_fill) {
-    // Allocate one!:
-    struct result *to_fill = (struct result *)malloc(sizeof(struct result));
-
-    if (to_fill == NULL)
-        return false;
-
-    *p_to_fill = to_fill;
-
-    to_fill->total = 0;
-    // to_ret->student = p_student_ptr;
-
-    to_fill->math = 0;
-    to_fill->science = 0;
-    to_fill->language = 0;
-
-    // ...And now, return it:
-    return true;
-}
+    ptr->math = 0;
+    ptr->science = 0;
+    ptr->language = 0;
+});
 #pragma endregion
 
 #pragma region // Deletion...
@@ -118,7 +123,6 @@ bool delete_result_struct(struct result **p_result_ptr) {
     *p_result_ptr = NULL;
     return true;
 }
-
 #pragma endregion
 #pragma endregion
 
