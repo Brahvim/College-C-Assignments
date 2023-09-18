@@ -19,7 +19,7 @@ DECLARE_GENERIC_INPUT_FUNCTIONS(ull);
 DEFINE_GENERIC_INPUT_FUNCTIONS(ull, "%llu");
 
 int main() {
-  const ull number_of_days = ensure_user_inputs_double("number of days to convert");
+  const ull number_of_days = ensure_user_inputs_ull("number of days to convert");
   printf("`%llu` days...\n", number_of_days);
 
   // Special case: Less than a month!:
