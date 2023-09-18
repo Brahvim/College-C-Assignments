@@ -42,14 +42,17 @@ bool create_ ## struct_name ## _struct(const struct struct_name **storage_addr)
  * 2. Name of the pointer holding `malloc()`'s return value.
  * 3. A code block / single line to make further changes to said pointer.
  *
- * The function thus defined takes in a double-pointer of the given type so assigning it to the received
- * double-pointer is possible.
+ * The function thus defined takes in a double-pointer of the given type.
+ * (So assigning it to the received double-pointer, as well as further changes, are possible.)
+ *
  * It returns `true` or `false` from `stdbool.h` to indicate the allocation's status.
  *
  * Example:
- * `DEFINE_MALLOCATOR(int, ptr, { *ptr = 0; })` - defines `create_int()`, a function that does things.
- * `int *a; create_int(&a); `
+ * The following defines `create_int(int** storage_addr)`, a which allocates an integer and sets it to `0`:
+ * `DEFINE_MALLOCATOR(int, ptr, { *ptr = 0; })`.
  *
+ * Here's how the function is to be used:
+ * `int *a; create_int(&a);` - this allocates an `int` on the heap, and sets it to `0`. It can be accessed using `a`.
  */
 #define DEFINE_MALLOCATOR(type, ptr_name, custom_config)    \
 DECLARE_MALLOCATOR(type)                                    \
@@ -60,9 +63,11 @@ DECLARE_STRUCT_MALLOCATOR(type) MALLOCATOR_DEFINITION(struct type, ptr_name, cus
 ; // <-- Placed to fix an issue caused by the VSCode formatter (it places an empty space before the next comment!).
 #pragma endregion
 
-#pragma region // Functions.
+#pragma region // Function declarations.
+// For structure de/-allocation:
+DECLARE_STRUCT_MALLOCATOR(student);
+DECLARE_STRUCT_MALLOCATOR(result);
 #pragma endregion
-
 
 // Structures (following the convention for the Linux kernel - without `typedef`s):
 struct student;
