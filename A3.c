@@ -13,10 +13,10 @@
 
 typedef unsigned long long ull;
 
-DECLARE_GENERIC_INPUT_FUNCTIONS(double);
+DECLARE_GENERIC_INPUT_FUNCTIONS(ull);
 #pragma endregion
 
-DEFINE_GENERIC_INPUT_FUNCTIONS(double, "%lf");
+DEFINE_GENERIC_INPUT_FUNCTIONS(ull, "%llu");
 
 int main() {
   const ull number_of_days = ensure_user_inputs_double("number of days to convert");
