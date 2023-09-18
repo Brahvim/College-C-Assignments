@@ -26,8 +26,8 @@ int main() {
   if (number_of_days < DAYS_PER_MONTH)
     PRINT_THEN_RETURN_ZERO("That's... `%llu` days, I guess.\n", number_of_days);
 
-  const ull months = number_of_days / DAYS_PER_MONTH;
-  const ull left_days = number_of_days - (months * DAYS_PER_MONTH);
+  const ull months = number_of_days / DAYS_PER_MONTH,
+    left_days = number_of_days - (months * DAYS_PER_MONTH);
 
   // Special case: Exactly in months!:
   if (left_days == 0)
