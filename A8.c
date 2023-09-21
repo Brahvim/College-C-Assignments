@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 typedef unsigned long long ull;
 
@@ -40,9 +41,37 @@ struct student {
 int main() {
     puts("Welcome to the marksheet-generation program!");
 
-    ull num_students =  ensure_user_inputs_ull("number of students");
+    ull num_students = ensure_user_inputs_ull("number of students");
 
-    CHECKED_MALLOC(students_array, struct student, printf("Heap allocation error on line `%d`!"));
+    CHECKED_MALLOC(students_array, struct student, printf("Heap allocation error on line `%d`!\n", __LINE__));
 
+    for (ull i = 1; i <= num_students; i++) {
+        puts("For student `%llu`:\n");
+        puts("Please enter the name of the student:");
+        puts("Please enter the registration number of the student:");
+    }
 
 }
+
+/*
+ull ensure_user_inputs_string(char **p_address_storage) {
+    char *string = NULL;
+    ull string_length = 10;
+
+    string = calloc(sizeof(char), string_length);
+
+    ull iterable = 10;
+    for (char c; c = getchar(); iterable--) {
+
+        if (iterable == 1) {
+            if (string_length == ULLONG_MAX) {
+                char *new_string = realloc(string, string_length *= 2);
+            }
+        }
+
+        if (c == '\n') {
+        } else if (c == EOF) {
+        }
+    }
+}
+*/
