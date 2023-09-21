@@ -27,8 +27,8 @@ int main() {
 ull calculate_factorial(const ull p_number) {
 	ull factorial = p_number, previous_factorial = 0;
 
-	if (factorial < 1)
-		return 0;
+	if (factorial < 2)
+		return 1;
 
 	for (ull i = factorial - 1; i > 0; i--) {
 		factorial *= i;
