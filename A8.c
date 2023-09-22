@@ -29,7 +29,6 @@ int main() {
     puts("Welcome to the marksheet-generation program!");
     ull num_students = ensure_user_inputs_ull("number of students");
 
-    // All ways out exit the program. Thus I never `free()` this:
     struct student *students_array = (struct student *)calloc(num_students, sizeof(struct student));
 
     if (students_array == NULL) {
@@ -71,5 +70,7 @@ int main() {
         struct student current_student = students_array[i];
         printf("Total for %s: `%f`.\n", current_student.name, current_student.total);
     }
+
+    free(students_array);
 
 }
