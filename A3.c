@@ -4,13 +4,6 @@
 #include "include/IoUtilsByBrahvim.h"
 #define DAYS_PER_MONTH 30
 
-// `__VA_ARGS__` is apparently a standard macro all C compilers define.
-#define PRINT_THEN_RETURN_ZERO(format, ...) \
-  {                                         \
-    printf(format, __VA_ARGS__);            \
-    return 0;                               \
-  }
-
 typedef unsigned long long ull;
 
 DECLARE_GENERIC_INPUT_FUNCTIONS(ull);
@@ -23,15 +16,19 @@ int main() {
   printf("`%llu` days...\n", number_of_days);
 
   // Special case: Less than a month!:
-  if (number_of_days < DAYS_PER_MONTH)
-    PRINT_THEN_RETURN_ZERO("That's... `%llu` days, I guess.\n", number_of_days);
+  if (number_of_days < DAYS_PER_MONTH) {
+    printf("That's... `%llu` days, I guess.\n", number_of_days);
+    exit(EXIT_SUCCESS);
+  }
 
   const ull months = number_of_days / DAYS_PER_MONTH,
     left_days = number_of_days - (months * DAYS_PER_MONTH);
 
   // Special case: Exactly in months!:
-  if (left_days == 0)
-    PRINT_THEN_RETURN_ZERO("That's exactly `%llu` months!\n", months);
+  if (left_days == 0) {
+    printf("That's exactly `%llu` months!\n", months);
+    exit(EXIT_SUCCESS);
+  }
 
-  PRINT_THEN_RETURN_ZERO("That's `%llu` months and `%llu` days.\n", months, left_days);
+  printf("That's `%llu` months and `%llu` days.\n", months, left_days);
 }
