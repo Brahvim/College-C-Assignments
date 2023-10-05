@@ -40,6 +40,9 @@ type ensure_user_inputs_##type(const char *prompt) {                       		\
         else                                                                    \
             printf("Please enter the %s: ", prompt);                          	\
         input_is_valid = parse_user_input_as_##type(&user_input);               \
+		if (!input_is_valid) { 													\
+			puts("That doesn't seem to be valid input. Try again..."); 			\
+		} 																		\
     }                                                                           \
 	return user_input;															\
                                                                                 \
