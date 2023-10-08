@@ -13,10 +13,8 @@ int main() {
 
     ull year = ensure_user_inputs_ull("year you want checked");
 
-    puts(
-        year % 4 == 0
-        && year % 100 == 0
-        && year % 400 == 0
+    puts(year % 400 == 0 ||
+        (year % 4 == 0 && year % 100 != 0)
         ? "This year is a leap year!"
         : "This year is not a leap year...");
 
