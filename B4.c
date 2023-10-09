@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #pragma region // Header declarations.
 typedef char strch_t; // This is to help switch encodings later if needed.
@@ -8,8 +6,12 @@ typedef char strch_t; // This is to help switch encodings later if needed.
 #pragma endregion
 
 int main() {
-    const strch_t **names = calloc(MAX_SIZE_FOR_READ_STRINGS, sizeof(strch_t *));
     size_t num_names = 0;
+    const strch_t **names = calloc(MAX_SIZE_FOR_READ_STRINGS, sizeof(strch_t *));
+
+    puts("Welcome to the string-sorting program!");
+    puts("Enter some strings (across lines) that you want sorted.");
+    puts("Send `EOF` when done! :)");
 
     // Should exit only if `stdin` has been closed:
     for (strch_t buf[MAX_SIZE_FOR_READ_STRINGS] = { 0 };
@@ -26,7 +28,8 @@ int main() {
             strch_t *new_name = calloc(len, sizeof(strch_t));
             if (new_name == NULL) {
                 perror("Allocating for storing a name failed!");
-                exit(EXIT_FAILURE);
+                return 0; // We can cut off an ENTIRE HEADER by doing this!
+                // No `stdlib.h` required!
             }
 
             strncpy(new_name, buf, len); // Copy the part of the string we read.
@@ -36,7 +39,7 @@ int main() {
         }
     }
 
-    puts("Sorting using bubble sort...");
+    puts("\nSorting 'em using bubble sort...\n");
 
     const size_t num_names_minus_1 = num_names - 1;
 
@@ -49,16 +52,13 @@ int main() {
             }
         }
 
+    for (size_t i = 0; i < num_names; i++) {
+        const char *name = names[i];
+        puts(name);
+        free(name);
+    }
 
-    for (size_t i = 0; i < num_names; i++)
-        free((void *)names[i]);
-
+    puts("Done. Bye now!");
     free(names);
 
-}
-
-void swap(void **p_1, void **p_2) {
-    void *temp = *p_1;
-    *p_1 = *p_2;
-    *p_2 = temp;
 }
