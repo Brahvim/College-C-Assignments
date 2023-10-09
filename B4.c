@@ -11,7 +11,6 @@ int main() {
 
     puts("Welcome to the string-sorting program!");
     puts("Enter some strings (across lines) that you want sorted.");
-    puts("Send `EOF` when done! :)");
 
     // Should exit only if `stdin` has been closed:
     for (strch_t buf[MAX_SIZE_FOR_READ_STRINGS] = { 0 };
