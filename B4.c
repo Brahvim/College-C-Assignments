@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #pragma region // Header declarations.
 typedef char strch_t; // This is to help switch encodings later if needed.
@@ -7,7 +9,7 @@ typedef char strch_t; // This is to help switch encodings later if needed.
 
 int main() {
     size_t num_names = 0;
-    const strch_t **names = calloc(MAX_SIZE_FOR_READ_STRINGS, sizeof(strch_t *));
+    strch_t **names = calloc(MAX_SIZE_FOR_READ_STRINGS, sizeof(strch_t *));
 
     puts("Welcome to the string-sorting program!");
     puts("Enter some strings (across lines) that you want sorted.");
@@ -27,8 +29,7 @@ int main() {
             strch_t *new_name = calloc(len, sizeof(strch_t));
             if (new_name == NULL) {
                 perror("Allocating for storing a name failed!");
-                return 0; // We can cut off an ENTIRE HEADER by doing this!
-                // No `stdlib.h` required!
+                exit(EXIT_FAILURE);
             }
 
             strncpy(new_name, buf, len); // Copy the part of the string we read.
@@ -44,15 +45,19 @@ int main() {
 
     for (size_t i = 0; i < num_names_minus_1; i++)
         for (size_t j = 0; j < num_names_minus_1 - i; j++) {
-            if (strcmp(names[j], names[j + 1]) > 0) {
-                const char *temp = names[j];
+            // ^^^ `- i` is an optimization.
+            if (names[j] == NULL) {
+                perror("One of the strings you gave was `NULL`!");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(names[j], names[j + 1]) > 0) {
+                char *temp = names[j];
                 names[j] = names[j + 1];
                 names[j + 1] = temp;
             }
         }
 
     for (size_t i = 0; i < num_names; i++) {
-        const char *name = names[i];
+        char *name = names[i];
         puts(name);
         free(name);
     }
