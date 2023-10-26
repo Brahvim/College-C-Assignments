@@ -20,17 +20,28 @@ int main() {
 
     for (size_t i = 0; true; i++) {
         int in = 0;
+        clear_stdin();
+        int num_scans = scanf("%d", &in);
 
-        if (!parse_user_input_as_int(&in))
-            break;
+        if (num_scans != 1)
+            // If the user sent `EOF`, stop:
+            if (num_scans == EOF)
+                break;
+            else { // Otherwise, we tell the user to try again:
+                puts("\nInvalid input, try this one again:");
+                i -= i == 0? 0 : 1;
+                continue;
+            }
 
-        if (i >= array_len)
+        // if the array is too small, re-allocate!:
+        if (i > array_len)
             array = (int*)realloc(array, array_len + sizeof(int) * 5);
-        
-        // TODO: Anything else?
+
+        // Assign:
+        array[i] = in;
     }
 
-    // sort_int_array(array, array_len);
+    sort_int_array(array, array_len);
     puts("Sorted, the numbers are: ");
 
     for (size_t i = 0; i < array_len; i++)
