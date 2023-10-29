@@ -3,39 +3,42 @@
 
 void sort_int_array(int *array, const size_t array_length);
 
-DECLARE_GENERIC_INPUT_FUNCTIONS(int);
+DECLARE_GENERIC_INPUT_SCANNER(int);
 #pragma endregion
 
-DEFINE_GENERIC_INPUT_FUNCTIONS(int, "%d");
+DEFINE_GENERIC_INPUT_SCANNER(int, "%d");
 
 int main() {
     puts("Welcome to the integer sorting program!");
     printf("Enter some `%lu`-byte integers to sort.\n", sizeof(int));
 
     size_t array_len = 5;
-    int *array = (int*)calloc(array_len, sizeof(int));
+    int *array = (int *)calloc(array_len, sizeof(int));
 
-    if (!array)
+    if (!array) {
         perror("Failed to allocate memory!\n");
+        return -1;
+    }
 
     for (size_t i = 0; true; i++) {
         int in = 0;
         clear_stdin();
-        int num_scans = scanf("%d", &in);
+        const int scanf_result = scanf("%d", &in);
 
-        if (num_scans != 1)
+        if (scanf_result != 1) {
             // If the user sent `EOF`, stop:
-            if (num_scans == EOF)
+            if (scanf_result == EOF)
                 break;
             else { // Otherwise, we tell the user to try again:
                 puts("\nInvalid input, try this one again:");
-                i -= i == 0? 0 : 1;
+                i -= i == 0 ? 0 : 1;
                 continue;
             }
+        }
 
         // if the array is too small, re-allocate!:
         if (i > array_len)
-            array = (int*)realloc(array, array_len + sizeof(int) * 5);
+            array = (int *)realloc(array, array_len + sizeof(int) * 5);
 
         // Assign:
         array[i] = in;
@@ -45,7 +48,9 @@ int main() {
     puts("Sorted, the numbers are: ");
 
     for (size_t i = 0; i < array_len; i++)
-        printf("`%d`%c", array[i], i == array_len? '.' : ',');
+        printf("`%d`%c", array[i], i == array_len ? '.' : ',');
+
+    putchar('\n');
 
     return 0;
 }
