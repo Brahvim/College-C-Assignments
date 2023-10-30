@@ -3,6 +3,17 @@
 #include <string.h>
 #include <ctype.h>
 
+/*
+    { BasedOnStyle: Google, IndentWidth: 4, ContinuationIndentWidth: 4, ColumnLimit: 120, AlignAfterOpenBracket:
+    AlwaysBreak, AlignConsecutiveAssignments: false, AlignConsecutiveDeclarations: true,
+    AllowAllParametersOfDeclarationOnNextLine: false, AllowShortBlocksOnASingleLine: false,
+    AllowShortCaseLabelsOnASingleLine: false, AllowShortFunctionsOnASingleLine: None,
+    AllowShortIfStatementsOnASingleLine: Never, AllowShortLoopsOnASingleLine: false, IndentCaseLabels: true,
+    IndentWrappedFunctionNames: false, KeepEmptyLinesAtTheStartOfBlocks: true, SpaceBeforeParens: ControlStatements,
+    TabWidth: 4, UseTab: Always, BreakBeforeTernaryOperators: true, BreakAfterTernaryColon: false,
+    BinPackArguments: false, AlignAfterOpenBracket: DontAlign, }
+*/
+
 #pragma region // Header declarations.
 typedef char strch_t; // This is to help switch encodings later if needed.
 #define MAX_SIZE_FOR_READ_STRINGS 5
@@ -43,8 +54,7 @@ int main() {
             if (names_array_reallocated == NULL) {
                 perror("Allocating more memory for more names failed!");
                 break;
-            }
-            else
+            } else
                 names = names_array_reallocated;
         }
 
@@ -84,8 +94,7 @@ int main() {
             if (names[j] == NULL) {
                 perror("One of the strings you gave was `NULL`! Cannot sort this...");
                 continue; // exit(EXIT_FAILURE);
-            }
-            else if (strcmp(names[j], names[j + 1]) > 0) {
+            } else if (strcmp(names[j], names[j + 1]) > 0) {
                 const char *temp = names[j];
                 names[j] = names[j + 1];
                 names[j + 1] = temp;
