@@ -1,27 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-typedef char strch_t; // This is to help switch encodings later if needed.
-
-char* read_line(const size_t reallocation_factor);
-
-#define UIN_BUF_SZ 5
-
-int main() {
-    puts("Welcome!");
-
-    char *line = read_line(UIN_BUF_SZ);
-    puts(line);
-    printf("The size of this string was: `%ld`.\n", strlen(line));
-    free(line);
-}
+#include "ReadLine.h"
+#include "IoUtilsByBrahvim.h"
 
 // [ https://stackoverflow.com/questions/52984551/using-fgets-with-realloc ]
 char* read_line(const size_t p_factor) {
     size_t size = 5; // ...Buffer's current size?
     size_t read_size = 0; // How filled is the buffer?!
     char *line = malloc(size);
+
+    clear_stdin();
 
     if (!line) {
         perror("`read_line()` failed to allocate memory.");
