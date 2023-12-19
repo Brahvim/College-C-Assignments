@@ -1,10 +1,9 @@
+// Author: Brahvim Bhaktvatsal
 #include <stdio.h>
 #include <stdlib.h>
-
 int main() {
     puts("Welcome to the string letter and number counter!");
     puts("Type something, send `EOF` when done, and see for yourself!");
-
     size_t num_chars = 0, num_nums = 0, chars_before_eof = 0;
 
     for (char c = '\0'; (c = getchar()) != EOF;) {
@@ -25,7 +24,6 @@ int main() {
             }
         }
     }
-
     putchar('\n');
     printf("That had `%lu` letters and `%lu` numbers.\n", num_chars, num_nums);
     printf("Overall, `%lu` characters (that includes newline characters!).\n", chars_before_eof);
