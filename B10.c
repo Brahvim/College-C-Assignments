@@ -3,62 +3,64 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "IoUtilsByBrahvim.h"
+#include "include/IoUtilsByBrahvim.h"
 
-// Type definition for character string.
-typedef char *strch_t;
+// Type for strings so we can change encodings later, just like in other programs:
+typedef char* strch_t;
 
-// Function to create and modify a string in dynamically allocated memory.
-strch_t alloc_string(const strch_t initial_string);
+DECLARE_GENERIC_INPUT_FUNCTIONS(size_t);
+DEFINE_GENERIC_INPUT_FUNCTIONS(size_t, "%lu");
+
+strch_t custom_strncpy(strch_t source_string, strch_t destination_string, const size_t max_chars_copyable);
 
 int main() {
-    puts("Welcome to the string modification program!");
+    puts("Welcome to the string allocation-test program!");
 
-    // Prompt the user for an initial string.
-    strch_t user_string;
-    printf("Please enter a string: ");
-    scanf(" %m[^\n]", &user_string);
+    // Ask the user what size they'd like for their string:
+    size_t str_size_initial = 0;
 
-    // Check if the string is too small.
-    if (user_string == NULL || strlen(user_string) == 0) {
-        puts("Invalid input. Please enter a non-empty string.");
-        return 1; // Return an error code.
+    while (str_size_initial == 0) {
+        str_size_initial = ensure_user_inputs_size_t("new size for your string");
     }
 
-    // Call the function to create and modify the string.
-    strch_t modified_string = alloc_string(user_string);
+    strch_t str_data_initial = malloc(str_size_initial);
 
-    // Print the modified string.
-    printf("Modified string: %s\n", modified_string);
+    puts("Please enter all characters in your string:");
 
-    // Free the dynamically allocated memory.
-    free(user_string);
-    free(modified_string);
+    for (size_t i = 0; i < str_size_initial; i++)
+        str_data_initial[i] = getchar();
 
-    return 0;
+    // Ask the user what size they'd like for the new string:
+    size_t str_size_new = 0;
+
+    clear_stdin();
+    while (str_size_new < str_size_initial) {
+        str_size_new = ensure_user_inputs_size_t("new size for your string");
+    }
+
+    strch_t str_data_new = realloc(str_data_new, str_size_new);
+
+    if (!str_data_new) {
+        perror("Out of memory! Could not allocate the new string...");
+        exit(EXIT_FAILURE);
+    }
+
+    puts("Please enter all characters to be APPENDED to your existing string!:");
+
+    const size_t to_scan = str_size_new - str_size_initial;
+    for (size_t i = 0; i < to_scan; i++)
+        str_data_new[i + str_size_initial] = getchar();
+
+    free(str_data_initial);
+    free(str_data_new);
 }
 
-strch_t alloc_string(const strch_t p_initial_string) {
-    // Dynamically allocate memory for the initial string.
-    strch_t modified_string = (strch_t)malloc((strlen(p_initial_string) + 1) * sizeof(char));
+strch_t custom_strncpy(strch_t p_src, strch_t p_dest, const size_t p_max_copyable) {
+    const size_t max_iter = p_max_copyable - 1;
 
-    if (modified_string == NULL) {
-        puts("Memory allocation failed. Exiting...");
-        exit(1); // Exit with an error code.
-    }
+    for (size_t i = 0; i < max_iter; i++)
+        p_dest[i] = p_src[i];
 
-    // Copy the initial string to the dynamically allocated memory.
-    strcpy(modified_string, p_initial_string);
-
-    // Prompt the user for a modified string.
-    printf("Enter a larger string: ");
-    scanf(" %m[^\n]", &modified_string);
-
-    // Check if the modified string is too small.
-    if (modified_string == NULL || strlen(modified_string) == 0) {
-        puts("Invalid input. Modified string must be non-empty.");
-        exit(1); // Exit with an error code.
-    }
-
-    return modified_string;
+    p_dest[max_iter] = '\0';
+    return p_dest;
 }
