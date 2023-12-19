@@ -1,108 +1,101 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <strings.h>
 #include <ctype.h>
 
 #pragma region // Header declarations.
 typedef char strch_t; // This is to help switch encodings later if needed.
+#define READ_LINE_FACTOR 2
 #define MAX_SIZE_FOR_READ_STRINGS 5
 #pragma endregion
 
-int main() {
-	size_t num_names = 0;
-	size_t space_for_names = 5;
-	strch_t **names = calloc(space_for_names, sizeof(strch_t *));
+strch_t* read_line(const size_t read_factor);
+int compare_strings(const void *a, const void *b);
 
-	if (names == NULL) {
-		perror("Startup error. Cannot continue...");
-		return EXIT_FAILURE;
+int compare_strings(const void *p_first, const void *p_second) {
+	return strcmp(*(const char**)p_first, *(const char**)p_second);
+}
+
+int main() {
+	size_t names_array_len = 0;
+	size_t space_for_names = 5;
+	strch_t **names_array = calloc(space_for_names, sizeof(strch_t *));
+
+	if (names_array == NULL) {
+		perror("Allocation error at startup! Can't continue...");
+		exit(EXIT_FAILURE);
 	}
 
 	puts("Welcome to the string-sorting program!");
 	puts("Enter some strings (across lines) that you want sorted.");
 
-	// This information is retained across loops
-	// to make sure large strings can be entered:
-	size_t new_name_len = 0;
-	strch_t *new_name = { 0 };
-
-	// You know what? I'll just learn from: [ https://stackoverflow.com/questions/52984551/using-fgets-with-realloc ].
-
-	for (strch_t buf[MAX_SIZE_FOR_READ_STRINGS] = { 0 };
-		// `fgets()` returns `NULL` when it reads `EOF` from the given `FILE` handle.
-		fgets(buf, MAX_SIZE_FOR_READ_STRINGS, stdin) != NULL;) {
-
-		// Add more space to the array if needed:
-		if (num_names >= space_for_names) {
-			// ...^^^ really just an equality check.
-			// Any overflow would cause a crash.
-
-			space_for_names += 5; // Allocate a bit more in advance.
-			// It's for just pointers anyway.
-
-			strch_t **names_array_reallocated = realloc(names, space_for_names * sizeof(strch_t *));
-
-			if (names_array_reallocated == NULL) {
-				perror("Allocating more memory for more names failed!");
-				break;
-			} else
-				names = names_array_reallocated;
+	while (true) {
+		if (names_array_len == space_for_names) {
+			space_for_names *= 2;
+			names_array = realloc(names_array, space_for_names);
 		}
 
-		const size_t len = strlen(buf), len_minus_1 = len - 1;
+		strch_t *name = read_line(READ_LINE_FACTOR);
+		names_array[names_array_len] = name;
 
-		// We want more memory at this point:
-		new_name = realloc(new_name, new_name_len + len + 1);
+		if (name == NULL)
+			break;
 
-		// Copy the part of the string we read:
-		strncpy(new_name + new_name_len, buf, len + 1);
-
-		// This replaces the `\n` with a `\0`:
-		if (len > 0 && buf[len_minus_1] == '\n') {
-			new_name[len_minus_1] = '\0'; // If we can, we end the string early.
-
-			// No need to clear `buf` like via this line here:
-			// memset(buf, 0, MAX_SIZE_FOR_READ_STRINGS);
-			// If the new string's longer that the contents in `buf`, good.
-			// The new string written into `buf` will have a `\0` before the older data anyway.
-
-			// Increment and assign!:
-			names[num_names++] = new_name;
-
-			// A new name will be placed there, so we reset the length here:
-			new_name = NULL;
-			new_name_len = 0;
-		}
-
+		names_array_len++;
 	}
 
-	puts("\nSorting using bubble sort...\n");
-
-	// FIXME Bubble-sorting the array of names:
-	// for (size_t i = 0; i <= num_names; i++)
-	//     for (size_t j = 0; j <= num_names - i; j++) {
-	//         // .............................. ^^^ the `- i` is an optimization.
-	//         if (names[j] == NULL) {
-	//             perror("One of the strings you gave was `NULL`! Cannot sort this...");
-	//             continue; // exit(EXIT_FAILURE);
-	//         } else if (strcmp(names[j], names[j + 1]) > 0) {
-	//             const char *temp = names[j];
-	//             names[j] = names[j + 1];
-	//             names[j + 1] = temp;
-	//         }
-	//     }
+	puts("\nSorting using quick sort...\n");
+	qsort(names_array, names_array_len, sizeof(names_array[0]), compare_strings);
 
 	// De-allocating space allocate for each name-string:
-	for (size_t i = 0; i < num_names; i++) {
-		char *name = names[i];
+	for (size_t i = 0; i < names_array_len; i++) {
+		strch_t *name = names_array[i];
 		puts(name);
 		free(name);
 	}
 
 	// De-allocating space used by the pointers:
 	puts("Done. Bye now!");
-	free(names);
+	free(names_array);
+}
 
-	return EXIT_SUCCESS;
+// [ https://stackoverflow.com/questions/52984551/using-fgets-with-realloc ]
+strch_t* read_line(const size_t p_factor) {
+	size_t size = 5; // ...Buffer's current size?
+	size_t read_size = 0; // How filled is the buffer?!
+	strch_t *line = malloc(size);
+
+	if (!line) {
+		perror("`read_line()` failed to allocate memory.");
+		return NULL;
+	}
+
+	char c = '\0';
+	for (; !((c = getchar()) == EOF || c == '\n');) {
+		line[read_size] = c;
+		read_size++;
+
+		if (read_size == size) {
+			size += p_factor;
+			strch_t *reallocated = realloc(line, size);
+
+			if (!reallocated) {
+				perror("`read_line()` failed to re-allocate memory.");
+				return line;
+			}
+
+			line = reallocated;
+		}
+	}
+
+	if (c == EOF)
+		return NULL;
+
+	// We re-allocate to make sure we have a string of the perfect size:
+	line = realloc(line, read_size + 1);
+	line[read_size] = '\0';
+
+	return line;
 }

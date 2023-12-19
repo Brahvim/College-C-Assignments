@@ -34,7 +34,7 @@ char* read_line(const size_t p_factor) {
 
         if (read_size == size) {
             size += p_factor;
-            const char *reallocated = realloc(line, size);
+            char *reallocated = realloc(line, size);
 
             if (!reallocated) {
                 perror("`read_line()` failed to re-allocate memory.");
