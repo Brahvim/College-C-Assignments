@@ -2,4 +2,5 @@
 .vscode
 
 # Files:
-a.out
+*.out
+Makefile
