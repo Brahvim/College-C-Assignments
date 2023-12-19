@@ -2,5 +2,6 @@
 .vscode
 
 # Files:
+*.o
 *.out
 Makefile
