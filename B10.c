@@ -56,4 +56,3 @@ int main() {
     printf("Your string should be: \"%s\"!\n", str_data);
     free(str_data);
 }
-
